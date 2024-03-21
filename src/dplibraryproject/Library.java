@@ -11,7 +11,7 @@ package dplibraryproject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Library {
+public class Library implements Cloneable {
     private static Library instance = null; // Singleton instance
     private Catalog catalog;
     private List<Member> members;
@@ -21,7 +21,7 @@ public class Library {
         this.members = new ArrayList<>();
     }
 
-    public static Library getInstance() {  // Singleton accessor 
+    public static Library getInstance() {  // Singleton accessor
         if (instance == null) {  // Create the instance if it doesn't exist
             instance = new Library();
         }
@@ -38,10 +38,14 @@ public class Library {
     public void addMember(Member member) {
         this.members.add(member);
     }
-    
-    // Method to get the list of all members
+
     public List<Member> getMembers() {
-        return this.members;
+        return members;
     }
-    
+
+    // Method to get the list of all members
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }

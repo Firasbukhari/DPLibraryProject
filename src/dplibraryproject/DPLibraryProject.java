@@ -16,7 +16,7 @@ public class DPLibraryProject {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Library library = new Library();
+        Library library =  Library.getInstance(); // Singleton instance of the library
 
         System.out.println("Welcome to the Library System!");
 
@@ -41,7 +41,7 @@ public class DPLibraryProject {
                     System.out.print("Enter ISBN: ");
                     String isbn = scanner.nextLine();
                     Book book = new Book(title, author, isbn);
-                    library.getCatalog().addBook(book);
+                    library.getCatalog().addBook(book); 
                     System.out.println("'" + title + "' added to the catalog.");
                 }
                 case 2 -> {
@@ -60,7 +60,7 @@ public class DPLibraryProject {
                     int id = scanner.nextInt();
                     scanner.nextLine(); // Consume newline
                     Member borrowingMember = null;
-                    for (Member m : library.getMembers()) {
+                    for (Member m : library.getMembers()) { 
                         if (m.getMemberId() == id) {
                             borrowingMember = m;
                             break;

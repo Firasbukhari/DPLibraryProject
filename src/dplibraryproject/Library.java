@@ -12,12 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Library {
-    public Catalog catalog;
-    public List<Member> members;
+    private static Library instance = null; // Singleton instance
+    private Catalog catalog;
+    private List<Member> members;
 
-    public Library() {
+    private Library() { // Private constructor
         this.catalog = new Catalog();
         this.members = new ArrayList<>();
+    }
+
+    public static Library getInstance() {  // Singleton accessor 
+        if (instance == null) {  // Create the instance if it doesn't exist
+            instance = new Library();
+        }
+        return instance;
     }
 
     // Methods to manage library (add members, books, etc.)

@@ -1,7 +1,7 @@
 package dplibraryproject;
 
 /**
- * Book class refactored to use the Builder Design Pattern.
+ * 
  */
 public class Book {
     private String title;
@@ -60,15 +60,5 @@ public class Book {
             return new Book(this);
         }
     }
-
-    // Example of using the BookBuilder
-    public static void main(String[] args) {
-        Book book = new Book.BookBuilder()
-                .setTitle("Java Design Patterns")
-                .setAuthor("James Smith")
-                .setIsbn("1234567890")
-                .build();
-
-        System.out.println(book);
-    }
 }
+    

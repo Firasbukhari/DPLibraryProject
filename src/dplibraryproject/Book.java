@@ -1,30 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dplibraryproject;
 
 /**
- *
- * @author Xxfir
+ * Book class refactored to use the Builder Design Pattern.
  */
 public class Book {
-    public String title;
-    public String author;
-    public String isbn;
+    private String title;
+    private String author;
+    private String isbn;
 
-    public Book(String title, String author, String isbn) {
-        this.title = title;
-        this.author = author;
-        this.isbn = isbn;
+    private Book(BookBuilder builder) {
+        this.title = builder.title;
+        this.author = builder.author;
+        this.isbn = builder.isbn;
     }
 
-    // Getter for ISBN
-    public String getIsbn() {
-        return isbn;
-    }
-
-    // Consider adding getters for title and author as well
     public String getTitle() {
         return title;
     }
@@ -33,5 +22,53 @@ public class Book {
         return author;
     }
 
-    // Optionally, you can also add setters if you need to modify these fields after object creation
+    public String getIsbn() {
+        return isbn;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+               "title='" + title + '\'' +
+               ", author='" + author + '\'' +
+               ", isbn='" + isbn + '\'' +
+               '}';
+    }
+
+    // Static Builder Class
+    public static class BookBuilder {
+        private String title;
+        private String author;
+        private String isbn;
+
+        public BookBuilder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public BookBuilder setAuthor(String author) {
+            this.author = author;
+            return this;
+        }
+
+        public BookBuilder setIsbn(String isbn) {
+            this.isbn = isbn;
+            return this;
+        }
+
+        public Book build() {
+            return new Book(this);
+        }
+    }
+
+    // Example of using the BookBuilder
+    public static void main(String[] args) {
+        Book book = new Book.BookBuilder()
+                .setTitle("Java Design Patterns")
+                .setAuthor("James Smith")
+                .setIsbn("1234567890")
+                .build();
+
+        System.out.println(book);
+    }
 }

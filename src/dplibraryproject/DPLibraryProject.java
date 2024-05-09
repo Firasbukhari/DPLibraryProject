@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 public class DPLibraryProject {
-
     public static void main(String[] args) {
         LibraryFacade facade = new LibraryFacade();
         Scanner scanner = new Scanner(System.in);
@@ -13,27 +12,38 @@ public class DPLibraryProject {
 
         while (true) {
             facade.displayOptions(); // Display the options
-
+            System.out.print("Select Loan Strategy: 1 for Normal, 2 for Priority");
+            int strategyChoice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            if (strategyChoice == 2) {
+                facade.setLoanStrategy(new PriorityLoanStrategy());
+            } else {
+                facade.setLoanStrategy(new NormalLoanStrategy());
+            }
+        
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
-
+            Command command;
+        
             switch (choice) {
                 case 1:
-                    facade.addBook(scanner);
+                    command = new AddBookCommand(facade, scanner);
                     break;
                 case 2:
-                    facade.registerMember(scanner);
+                    command = new RegisterMemberCommand(facade, scanner);
                     break;
                 case 3:
-                    facade.checkOutBook(scanner);
+                    command = new CheckOutBookCommand(facade, scanner);
                     break;
                 case 4:
                     System.out.println("Exiting the Library System. Goodbye!");
                     System.exit(0);
                 default:
                     System.out.println("Invalid option. Please try again.");
+                    continue;
             }
+            command.execute();
         }
     }
 }
@@ -41,10 +51,17 @@ public class DPLibraryProject {
 class LibraryFacade {
     private Library library;
     private Librarian librarian;
+    private LoanStrategy loanStrategy;  // Field to hold the current loan strategy
 
     public LibraryFacade() {
         library = Library.getInstance();
         librarian = new Librarian("Default Librarian", library);
+        this.loanStrategy = new NormalLoanStrategy();  // Default strategy
+    }
+
+    // Method to set the current loan strategy
+    public void setLoanStrategy(LoanStrategy loanStrategy) {
+        this.loanStrategy = loanStrategy;
     }
 
     public void addBook(Scanner scanner) {
@@ -88,6 +105,7 @@ class LibraryFacade {
                 break;
             }
         }
+
         if (borrowingMember == null) {
             System.out.println("Member not found.");
             return;
@@ -102,9 +120,8 @@ class LibraryFacade {
             return;
         }
 
-        Loan loan = new Loan(borrowingMember, bookToCheckout, LocalDate.now().plusWeeks(2));
-        borrowingMember.addLoan(loan);
-        System.out.println("Book '" + bookToCheckout.getTitle() + "' checked out to " + borrowingMember.getName() + ".");
+        // Use the current loan strategy to process the loan
+        loanStrategy.processLoan(borrowingMember, bookToCheckout);
     }
 
     public void displayOptions() {
